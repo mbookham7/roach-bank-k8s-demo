@@ -9,6 +9,31 @@ kubectl get pods --context $clus2 --namespace $loc2
 kubectl get pods --context $clus3 --namespace $loc3
 ```
 
+If the deployments have been scale to zero you will see no pods. Scale them back up for the demo.
+Bank Server first.
+```
+kubectl scale deployment bank-server --replicas=2 -n roach-bank --context $clus1
+kubectl scale deployment bank-server --replicas=2 -n roach-bank --context $clus2
+kubectl scale deployment bank-server --replicas=2 -n roach-bank --context $clus3
+```
+
+Then the client. Starting with 2 replicas per region.
+```
+kubectl scale deployment bank-client --replicas=1 -n roach-bank --context $clus1
+kubectl scale deployment bank-client --replicas=1 -n roach-bank --context $clus2
+kubectl scale deployment bank-client --replicas=1 -n roach-bank --context $clus3
+```
+
+Tail the logs from one of the bank-client pods.
+```
+kubectl get po -n roach-bank --context $clus2
+```
+
+Grab the pod name and tail the logs.
+```
+kubectl logs -f --tail 10 $bank-client-pod -n roach-bank --context $clus2
+```
+
 Delete a single node or pod in k8s terms form any region.
 ```
 kubectl delete po cockroachdb-0 -n $loc1 --context $clus1

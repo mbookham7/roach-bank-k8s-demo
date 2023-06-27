@@ -1,6 +1,6 @@
 # Cloud Deployment Tutorial
 
-Deployment tutorial for setting up a full-stack demo using either a single or multi-region cloud deployment.
+Deployment tutorial for setting up a full-stack demo using multi-region cloud deployment.
 
 ## Prerequisites
 

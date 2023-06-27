@@ -99,3 +99,17 @@ Remove the the dead nodes. CHECK NODE NUMBERS IN THE UI!!!
 kubectl exec -it cockroachdb-client-secure -n $loc1 --context $clus1 -- ./cockroach node decommission <node numbers> --certs-dir=/cockroach-certs --host=cockroachdb-public
 ```
 
+
+Perform a rolling restart of pods in each statfulset. One region at a time.
+```
+kubectl rollout restart statefulsets cockroachdb -n $loc1 --context $clus1
+```
+Once region 1 is completed do region 2.
+```
+kubectl rollout restart statefulsets cockroachdb -n $loc2 --context $clus2
+```
+Once region 2 is complete do region 3.
+```
+kubectl rollout restart statefulsets cockroachdb -n $loc3 --context $clus3
+```
+
