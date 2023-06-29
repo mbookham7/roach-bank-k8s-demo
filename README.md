@@ -1,4 +1,4 @@
-# Deploy Roach Bank into Kubernetes (UNDER CONSTRUCTION)
+# Deploy Roach Bank into Kubernetes
 
 Roach Bank represents a full-stack, financial accounting ledger demo running on [CockroachDB](https://www.cockroachlabs.com/)
 and PostgreSQL. It's designed to demonstrate the safety and liveness properties of a globally deployed, 
