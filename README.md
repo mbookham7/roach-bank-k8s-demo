@@ -112,4 +112,3 @@ Once region 2 is complete do region 3.
 ```
 kubectl rollout restart statefulsets cockroachdb -n $loc3 --context $clus3
 ```
-
