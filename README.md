@@ -15,6 +15,15 @@ balance.
 
 ![frontend](docs/diagram_frontend.png)
 
+```
+clus1="crdb-aks-uksouth"
+clus2="crdb-aks-ukwest"
+clus3="crdb-aks-northeurope"
+loc1="uksouth"
+loc2="ukwest"
+loc3="northeurope"
+```
+
 # Deployment
 
 See the [Deployment Guide](deploy/README.md) on how to deploy the ledger to a multi-region Kubernetes cluster.
@@ -99,6 +108,20 @@ Remove the the dead nodes. CHECK NODE NUMBERS IN THE UI!!!
 kubectl exec -it cockroachdb-client-secure -n $loc1 --context $clus1 -- ./cockroach node decommission <node numbers> --certs-dir=/cockroach-certs --host=cockroachdb-public
 ```
 
+Scale Roach Bank to zero, first with the client.
+```
+kubectl scale deployment bank-client --replicas=0 -n roach-bank --context $clus1
+kubectl scale deployment bank-client --replicas=0 -n roach-bank --context $clus2
+kubectl scale deployment bank-client --replicas=0 -n roach-bank --context $clus3
+```
+Then the server. This will conserve resources. 
+```
+kubectl scale deployment bank-server --replicas=0 -n roach-bank --context $clus2
+kubectl scale deployment bank-server --replicas=0 -n roach-bank --context $clus3
+kubectl scale deployment bank-server --replicas=0 -n roach-bank --context $clus1
+```
+
+If you need to ever perform a rolling re-start of the cockroachdb pods this is how.
 
 Perform a rolling restart of pods in each statfulset. One region at a time.
 ```

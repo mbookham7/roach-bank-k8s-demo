@@ -6,7 +6,7 @@ metadata:
   namespace: northeurope
 spec:
   serviceName: "cockroachdb"
-  replicas: 3
+  replicas: 6
   selector:
     matchLabels:
       app: cockroachdb
