@@ -5,14 +5,14 @@ This is done by updating the image tag in the statefulSet manifest.
 ```
       containers:
       - name: cockroachdb
-        image: cockroachdb/cockroach:v23.1.3
+        image: cockroachdb/cockroach:v23.2.1
         imagePullPolicy: IfNotPresent
 ```
 
 Each manifest needs to be applied in turn, a region at a time to ensure there is no disruption to service.
 
 Apply region one and observe the changes in the CockroachDB UI
-``````
+```
 kubectl -n $loc1 apply -f ./upgrade/manifest/uksouth-cockroachdb-statefulset-secure.yaml --context $clus1
 ```
 

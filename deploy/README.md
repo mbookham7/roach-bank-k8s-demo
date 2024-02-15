@@ -21,12 +21,12 @@ First create a CockroachDB cluster with a cloud provider of choice.
 
 First to allow for ease of use of these instructions we need to set some variables. These variables need to set the context of each of the Kubernetes cluster
 ```
-clus1="crdb-aks-uksouth"
-clus2="crdb-aks-ukwest"
-clus3="crdb-aks-northeurope"
+clus1="mb-crdb-mr-k8s-uksouth"
+clus2="mb-crdb-mr-k8s-eastus"
+clus3="mb-crdb-mr-k8s-westus"
 loc1="uksouth"
-loc2="ukwest"
-loc3="northeurope"
+loc2="eastus"
+loc3="westus"
 ```
 
 Once you have a multi region CockroachDB cluster, connect to the cluster and create a database called `roach_bank`
@@ -50,9 +50,9 @@ Bank Server needs to be deployed into each region. This is done by applying a si
 To make our lives easier lets set our Kubernetes contexts as environment variables.
 > If you followed my AKS guide and used the same regions then you can use the values below. If you didn't make sure you update them to the correct values for your environment.
 ```
-clus1="crdb-aks-uksouth"
-clus2="crdb-aks-ukwest"
-clus3="crdb-aks-northeurope"
+clus1="mb-crdb-mr-k8s-uksouth"
+clus2="mb-crdb-mr-k8s-eastus"
+clus3="mb-crdb-mr-k8s-westus"
 ```
 
 Create a new namespace for Roach Bank to be deployed into in each region.
@@ -65,8 +65,8 @@ kubectl create namespace roach-bank --context $clus3
 Deploy Roach Bank server pod into each of the clusters and create a service to expose this to the outside world.
 ```
 kubectl apply -f ./manifest/uksouth-deployment.yaml -n roach-bank --context $clus1
-kubectl apply -f ./manifest/ukwest-deployment.yaml -n roach-bank --context $clus2
-kubectl apply -f ./manifest/northeurope-deployment.yaml -n roach-bank --context $clus3
+kubectl apply -f ./manifest/eastus-deployment.yaml -n roach-bank --context $clus2
+kubectl apply -f ./manifest/westus-deployment.yaml -n roach-bank --context $clus3
 ```
 Check each cluster to ensure the pods are running.
 ```
@@ -76,18 +76,17 @@ kubectl get po -n roach-bank --context $clus3
 ```
 
 ```
-ALTER DATABASE roach_bank PRIMARY REGION "azure-northeurope";
-ALTER DATABASE roach_bank ADD REGION "azure-uksouth";
-ALTER DATABASE roach_bank ADD REGION "azure-ukwest";
+ALTER DATABASE roach_bank PRIMARY REGION "eastus";
+ALTER DATABASE roach_bank ADD REGION "uksouth";
+ALTER DATABASE roach_bank ADD REGION "westus";
 ```
 
 ```
 DELETE  from region where 1=1;
-INSERT into region
-VALUES 
-('azure','azure-northeurope', 'stockholm,copenhagen,helsinki,oslo,riga,tallinn'),
-('azure','azure-uksouth', 'london,birmingham,leeds,amsterdam,rotterdam,antwerp,hague,ghent,brussels'),
-('azure','azure-ukwest', 'dublin,belfast,london,liverpool,manchester,glasgow,birmingham,leeds');
+
+INSERT INTO region (name,city_groups) VALUES ('azure-northeurope',ARRAY('stockholm','copenhagen','helsinki','oslo','riga','tallinn'));
+INSERT INTO region (name,city_groups) VALUES ('azure-uksouth',ARRAY('london,birmingham,leeds,amsterdam,rotterdam,antwerp,hague,ghent,brussels'));
+INSERT INTO region (name,city_groups) VALUES ('azure-west',ARRAY('dublin,belfast,london,liverpool,manchester,glasgow,birmingham,leeds'));
 \q
 ```
 
