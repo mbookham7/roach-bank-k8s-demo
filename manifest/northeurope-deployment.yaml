@@ -21,7 +21,7 @@ spec:
       - image: docker.io/mikebookhamcap/bank-server:2.0.1
         imagePullPolicy: Always
         name: bank-server
-        args: ["--spring.datasource.url=jdbc:postgresql://cockroachdb-public.eastus.svc.cluster.local:26257/roach_bank?sslmode=require", "--spring.datasource.username=craig", "--spring.datasource.password=cockroach", "--roachbank.alternative-workflow=true", "--roachbank.default-account-limit=500", "--roachbank.select-for-update=true", "--roachbank.account-plan.accounts-per-city: 10000", "--roachbank.account-plan.initial-balance: \"100000.00\""]
+        args: ["--spring.datasource.url=jdbc:postgresql://cockroachdb-public.northeurope.svc.cluster.local:26257/roach_bank?sslmode=require", "--spring.datasource.username=craig", "--spring.datasource.password=cockroach", "--roachbank.alternative-workflow=true", "--roachbank.default-account-limit=500", "--roachbank.select-for-update=true", "--roachbank.account-plan.accounts-per-city: 10000", "--roachbank.account-plan.initial-balance: \"100000.00\""]
         resources: {}
 status: {}
 ---

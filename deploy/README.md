@@ -22,11 +22,11 @@ First create a CockroachDB cluster with a cloud provider of choice.
 First to allow for ease of use of these instructions we need to set some variables. These variables need to set the context of each of the Kubernetes cluster
 ```
 clus1="mb-crdb-mr-k8s-uksouth"
-clus2="mb-crdb-mr-k8s-eastus"
-clus3="mb-crdb-mr-k8s-westus"
+clus2="mb-crdb-mr-k8s-ukwest"
+clus3="mb-crdb-mr-k8s-northeurope"
 loc1="uksouth"
-loc2="eastus"
-loc3="westus"
+loc2="ukwest"
+loc3="northeurope"
 ```
 
 Once you have a multi region CockroachDB cluster, connect to the cluster and create a database called `roach_bank`
@@ -65,8 +65,8 @@ kubectl create namespace roach-bank --context $clus3
 Deploy Roach Bank server pod into each of the clusters and create a service to expose this to the outside world.
 ```
 kubectl apply -f ./manifest/uksouth-deployment.yaml -n roach-bank --context $clus1
-kubectl apply -f ./manifest/eastus-deployment.yaml -n roach-bank --context $clus2
-kubectl apply -f ./manifest/westus-deployment.yaml -n roach-bank --context $clus3
+kubectl apply -f ./manifest/ukwest-deployment.yaml -n roach-bank --context $clus2
+kubectl apply -f ./manifest/northeurope-deployment.yaml -n roach-bank --context $clus3
 ```
 Check each cluster to ensure the pods are running.
 ```
