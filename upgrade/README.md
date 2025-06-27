@@ -11,17 +11,27 @@ This is done by updating the image tag in the statefulSet manifest.
 
 Each manifest needs to be applied in turn, a region at a time to ensure there is no disruption to service.
 
+
 Apply region one and observe the changes in the CockroachDB UI
 ```
-kubectl -n $loc1 apply -f ./upgrade/manifest/uksouth-cockroachdb-statefulset-secure.yaml --context $clus1
+kubectl patch statefulset cockroachdb -n $loc1 \
+  --type='json' \
+  -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/image", "value":"cockroachdb/cockroach:v24.1.19"}]' \
+  --context $clus1
 ```
 
 Wait for the rollout to complete before moving on to next region.
 ```
-kubectl -n $loc2 apply -f ./upgrade/manifest/ukwest-cockroachdb-statefulset-secure.yaml --context $clus2
+kubectl patch statefulset cockroachdb -n $loc2 \
+  --type='json' \
+  -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/image", "value":"cockroachdb/cockroach:v24.1.19"}]' \
+  --context $clus2
 ```
 
 Again wait for the rollout to finish and then finish with the final region
 ```
-kubectl -n $loc3 apply -f ./upgrade/manifest/northeurope-cockroachdb-statefulset-secure.yaml --context $clus3
+kubectl patch statefulset cockroachdb -n $loc3 \
+  --type='json' \
+  -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/image", "value":"cockroachdb/cockroach:v24.1.19"}]' \
+  --context $clus3
 ```
