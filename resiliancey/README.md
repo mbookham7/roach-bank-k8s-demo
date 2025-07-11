@@ -31,7 +31,8 @@ kubectl get po -n roach-bank --context $clus2
 
 Grab the pod name and tail the logs.
 ```
-kubectl logs -f --tail 10 $bank-client-pod -n roach-bank --context $clus2
+export POD_NAME=$(kubectl get pods -n roach-bank --context $clus2 --selector=app=bank-client -o jsonpath="{.items[0].metadata.name}")
+kubectl logs -f --tail 100 $POD_NAME -n roach-bank --context $clus2
 ```
 
 Delete a single node or pod in k8s terms form any region.
